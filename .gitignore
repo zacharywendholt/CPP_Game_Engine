@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+.vscode/c_cpp_properties.json
+MakeFile
+notes.txt
+.vscode/tasks.json
