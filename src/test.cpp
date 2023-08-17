@@ -2,9 +2,20 @@
 #include <stdio.h>
 #include <SDL.h>
 
-
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+
+//Starts up SDL and creates window
+bool init();
+
+//Loads media
+bool loadMedia();
+
+//Frees media and shuts down SDL
+void close();
+
+void mainGameLoop();
+
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
     
@@ -13,7 +24,6 @@ SDL_Surface* gScreenSurface = NULL;
 
 //The image we will load and show on the screen
 SDL_Surface* gHelloWorld = NULL;
-
 
 
 bool init()
@@ -78,32 +88,61 @@ void close()
     SDL_Quit();
 }
 
-int main(int argc, char* argv[]) {
+void mainGameLoop()
+{
+    //Main loop flag
+    bool quit = false;
 
-    //Start up SDL and create window
-    if( !init() )
+    //Event handler
+    SDL_Event e;
+    while( !quit )
     {
-        printf( "Failed to initialize!\n" );
-    }
-    else
-    {
-        //Load media
-        if( !loadMedia() )
+        //Handle events on queue
+        while( SDL_PollEvent( &e ) != 0 )
         {
-            printf( "Failed to load media!\n" );
+            //User requests quit
+            if( e.type == SDL_QUIT )
+            {
+                quit = true;
+            }
+            else if (e.type == SDL_KEYDOWN) {
+                if(e.key.keysym.sym == SDLK_a){
+                    printf("pressed a");
+                }
+            }
         }
-        else
-        {
-            //Apply the image
-            SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
-            //Update the surface
-            SDL_UpdateWindowSurface( gWindow );
-            //Hack to get window to stay up
-            SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
-        }
+
+        //Apply the image
+        SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
+    
+        //Update the surface
+        SDL_UpdateWindowSurface( gWindow );
     }
+}
 
-    close();
+int main( int argc, char* args[] )
+{
+	//Start up SDL and create window
+	if( !init() )
+	{
+		printf( "Failed to initialize!\n" );
+	}
+	else
+	{
+		//Load media
+		if( !loadMedia() )
+		{
+			printf( "Failed to load media!\n" );
+		}
+		else
+		{			
+            // do the main game loop.
+			mainGameLoop();
+		}
+	}
 
-    return 0;
+	//Free resources and close SDL
+	close();
+
+	return 0;
 }
