@@ -1,16 +1,25 @@
 #include "headers/point.h"
 #include "headers/player.h"
 
+int defaultSpeed = 0;
 
-/*
-Player::Player(Point position, int movementSpeed)
+Player::Player(int speed, Point pos) 
 {
-  position = position;
-  movementSpeed = movementSpeed;
+    speed = speed;
+    pos = pos;
 }
 
-Point Player::getPosition()
+Player::Player(int speed)
 {
-  return position;
+    speed = speed;
+    pos = Point(0, 0);
 }
-*/
+
+Player::Player() 
+{
+    speed = 0;
+    pos = Point(0, 0);
+}
+
+
+

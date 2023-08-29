@@ -20,13 +20,9 @@ bool init();
 int playerXPos;
 int playerYPos;
 
-//Player player;
-
+Player player = Player(0);
 
 const int movementSpeed = 5;
-
-
-
 
 //Loads media
 bool loadMedia();
@@ -89,7 +85,7 @@ bool init()
 
     Point playerPos = Point(0.0, 0.0);
 
-    //player = Player(playerPos);
+    player = Player(0);
 
     playerXPos = SCREEN_WIDTH / 2;
     playerYPos = SCREEN_HEIGHT / 2;
@@ -204,7 +200,7 @@ void mainGameLoop()
                 if(e.key.keysym.sym == SDLK_a){
                     printf("ab");
                     playerXPos -= 1;
-                    //printf("%f", player.position.x);
+                    printf("%f", player.speed);
                     
                 } else if(e.key.keysym.sym == SDLK_d){
                     printf("a");
