@@ -8,11 +8,14 @@
 class Player {
       
     public:
-        Player(int speed, Point pos);
-        Player(int speed);
+        Player(int speed, int width, int height, Point pos);
+        Player(int speed, int width, int height);
         Player();
         int speed;
+        int width;
+        int height;
         Point pos;
+        void move(int x, int y);
         
 };
 

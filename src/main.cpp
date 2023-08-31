@@ -1,5 +1,5 @@
 #include <iostream>
-#include <stdio.h>
+
 #include <SDL.h>
 #include "headers/player.h"
 #include "headers/point.h"
@@ -7,22 +7,15 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-
-const int PLAYER_WIDTH = 10;
-const int PLAYER_HEIGHT = 10;
-
 //Starts up SDL and creates window
 bool init();
 
 //Player Information
 
-
-int playerXPos;
-int playerYPos;
-
-Player player = Player(0);
-
-const int movementSpeed = 5;
+Player player;
+const int MOVEMENT_SPEED = 5;
+const int PLAYER_WIDTH = 10;
+const int PLAYER_HEIGHT = 10;
 
 //Loads media
 bool loadMedia();
@@ -81,16 +74,12 @@ int main( int argc, char* args[] )
 bool init()
 {
     //Initialization flag
-    bool success = true;
+    bool success = true;    
 
-    Point playerPos = Point(0.0, 0.0);
-
-    player = Player(0);
-
-    playerXPos = SCREEN_WIDTH / 2;
-    playerYPos = SCREEN_HEIGHT / 2;
-
-
+    player = Player(MOVEMENT_SPEED, 
+                    PLAYER_WIDTH, 
+                    PLAYER_HEIGHT, 
+                    Point(50, 50));
 
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -198,21 +187,16 @@ void mainGameLoop()
             }
             else if (e.type == SDL_KEYDOWN) {
                 if(e.key.keysym.sym == SDLK_a){
-                    printf("ab");
-                    playerXPos -= 1;
-                    printf("%f", player.speed);
-                    
+                    player.move(-player.speed, 0);
+
                 } else if(e.key.keysym.sym == SDLK_d){
-                    printf("a");
-                    playerXPos += 1;
+                    player.move(player.speed, 0);
+                    player.pos.print();
                 } else if(e.key.keysym.sym == SDLK_w){
-                    printf("a");
-                    playerYPos -= 1;
+                    player.move(0, -player.speed);
                 } else if(e.key.keysym.sym == SDLK_s){
-                    printf("a");
-                    playerYPos += 1;
+                    player.move(0, player.speed);
                 }
-                
                 
                 else if (e.key.keysym.sym == SDLK_ESCAPE) {
                     quit = true;
@@ -229,10 +213,12 @@ void mainGameLoop()
 
 
         SDL_Rect playerRect;
-        playerRect.x = playerXPos;
-        playerRect.y = playerYPos;
+        playerRect.x = player.pos.x;
+        playerRect.y = player.pos.y;
         playerRect.w = PLAYER_WIDTH;
         playerRect.h = PLAYER_HEIGHT;
+
+        
 
 
         //SDL_BlitScaled( gStretchedSurface, NULL, gScreenSurface, &stretchRect );
