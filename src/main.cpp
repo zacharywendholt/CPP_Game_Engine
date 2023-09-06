@@ -12,10 +12,11 @@ bool init();
 
 //Player Information
 
-Player player;
 const int MOVEMENT_SPEED = 5;
 const int PLAYER_WIDTH = 10;
 const int PLAYER_HEIGHT = 10;
+
+Player player;
 
 //Loads media
 bool loadMedia();
@@ -188,14 +189,12 @@ void mainGameLoop()
             else if (e.type == SDL_KEYDOWN) {
                 if(e.key.keysym.sym == SDLK_a){
                     player.move(-player.speed, 0);
-
                 } else if(e.key.keysym.sym == SDLK_d){
                     player.move(player.speed, 0);
-                    player.pos.print();
                 } else if(e.key.keysym.sym == SDLK_w){
                     player.move(0, -player.speed);
                 } else if(e.key.keysym.sym == SDLK_s){
-                    player.move(0, player.speed);
+                    player.pos.y += player.speed;
                 }
                 
                 else if (e.key.keysym.sym == SDLK_ESCAPE) {

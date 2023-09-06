@@ -1,14 +1,14 @@
 #include "../headers/point.h"
 #include <stdio.h>
 
-Point::Point(double x, double y) {
-    x = x;
-    y = y;
+Point::Point(int x, int y) {
+    this->x = x;
+    this->y = y;
 }
 
 Point::Point() {
-    x = 0;
-    y = 0;
+    this->x = 0;
+    this->y = 0;
 }
 
 void Point::print(){

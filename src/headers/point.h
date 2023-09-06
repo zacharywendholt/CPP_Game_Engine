@@ -3,10 +3,10 @@
 
 class Point {
     public: 
-        Point(double x, double y);
+        Point(int x, int y);
         Point();
-        double x;
-        double y;
+        int x;
+        int y;
         void print();
 };
 
