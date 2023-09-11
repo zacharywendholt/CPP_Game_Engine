@@ -1,4 +1,6 @@
 #include "point.h"
+#include <SDL.h>
+#include <SDL_image.h>
 
 #ifndef Player_H
 #define Player_H
@@ -15,7 +17,9 @@ class Player {
         int width;
         int height;
         Point pos;
+        SDL_Surface* playerSurface;
         void move(int x, int y);
+        void close();
         
 };
 

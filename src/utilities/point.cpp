@@ -13,7 +13,7 @@ Point::Point() {
 
 void Point::print(){
     printf("(");
-    printf("%i", x, "test");
+    printf("%i", x);
     printf(",");
     printf("%i", y);
     printf(")");

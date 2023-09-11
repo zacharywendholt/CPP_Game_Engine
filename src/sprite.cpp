@@ -5,9 +5,6 @@
 #include "headers/sprite.h"
 
 //Texture wrapper class
-
-
-
 SpriteTexture::SpriteTexture()
 {
 	//Initialize
@@ -23,7 +20,7 @@ SpriteTexture::~SpriteTexture()
 	free();
 }
 
-bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer& gRenderer)
+bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer* gRenderer)
 {
 	//Get rid of preexisting texture
 	free();
@@ -43,7 +40,7 @@ bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer& gRenderer)
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( &gRenderer, loadedSurface );
+        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
 		if( newTexture == NULL )
 		{
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -94,8 +91,11 @@ void SpriteTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void SpriteTexture::render( int x, int y, SDL_Rect* clip, SDL_Renderer& gRenderer)
+void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer, SDL_Rect* clip)
 {
+	// LOOK ino this. 
+
+	
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
@@ -105,9 +105,10 @@ void SpriteTexture::render( int x, int y, SDL_Rect* clip, SDL_Renderer& gRendere
 		renderQuad.w = clip->w;
 		renderQuad.h = clip->h;
 	}
+	
 
 	//Render to screen
-	SDL_RenderCopy( &gRenderer, mTexture, clip, &renderQuad );
+	SDL_RenderCopy( gRenderer, mTexture, clip, NULL );
 }
 
 int SpriteTexture::getWidth()
@@ -120,7 +121,7 @@ int SpriteTexture::getHeight()
 	return mHeight;
 }
 
-bool SpriteTexture::loadSpriteAnimationFrames(SDL_Renderer& gRenderer)
+bool SpriteTexture::loadSpriteAnimationFrames(SDL_Renderer* gRenderer)
 {
 	//Loading success flag
 	bool success = true;

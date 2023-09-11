@@ -31,7 +31,8 @@
 *.out
 *.app
 .vscode/c_cpp_properties.json
-MakeFile
+MakeFile_redacted
 notes.txt
 .vscode/tasks.json
 README
+res/foo.png

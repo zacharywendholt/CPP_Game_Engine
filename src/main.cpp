@@ -1,15 +1,12 @@
 #include <iostream>
 
 #include <SDL.h>
-#include <SDL_image.h>
 #include "headers/player.h"
 #include "headers/point.h"
+#include "headers/window.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-
-//Starts up SDL and creates window
-bool init();
 
 //Player Information
 
@@ -19,28 +16,21 @@ const int PLAYER_HEIGHT = 10;
 
 Player player;
 
-//Loads media
-bool loadMedia();
+Window gameWindow;
 
-//Loads individual image
-SDL_Surface* loadStretchedSurface( std::string path );
+//Starts up SDL and creates window
+bool init();
 
 //Frees media and shuts down SDL
 void close();
 
 void mainGameLoop();
 
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
-    
-//The surface contained by the window
-SDL_Surface* gScreenSurface = NULL;
+//Loads individual image
+SDL_Surface* loadStretchedSurface( std::string path , SDL_Surface* gRenderer);
 
 //The image we will load and show on the screen
 SDL_Surface* gHelloWorld = NULL;
-
-//Current displayed image
-SDL_Surface* gStretchedSurface = NULL;
 
 SDL_Surface* gPlayerSurface = NULL;
 
@@ -54,16 +44,8 @@ int main( int argc, char* args[] )
 	}
 	else
 	{
-		//Load media
-		if( !loadMedia() )
-		{
-			printf( "Failed to load media!\n" );
-		}
-		else
-		{			
-            // do the main game loop.
-			mainGameLoop();
-		}
+        // do the main game loop.
+        mainGameLoop();
 	}
 
 	//Free resources and close SDL
@@ -76,63 +58,21 @@ int main( int argc, char* args[] )
 bool init()
 {
     //Initialization flag
-    bool success = true;    
+    bool success = true; 
 
     player = Player(MOVEMENT_SPEED, 
                     PLAYER_WIDTH, 
                     PLAYER_HEIGHT, 
                     Point(50, 50));
-
-    //Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-    {
-        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-        success = false;
-    }
-    else
-    {
-        //Create window
-        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-        if( gWindow == NULL )
-        {
-            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-            success = false;
-        }
-        else
-        {
-            //Get window surface
-            gScreenSurface = SDL_GetWindowSurface( gWindow );
-        }
-    }
-
+    gPlayerSurface = loadStretchedSurface("res/player.bmp", gameWindow.gScreenSurface);
     return success;
 }
 
 
-bool loadMedia()
-{
-    //Loading success flag
-    bool success = true;
-
-    //Load stretching surface
-	gStretchedSurface = loadStretchedSurface( "res/owlHead.bmp" );
-    gPlayerSurface = loadStretchedSurface("res/player.bmp");
-
-    if( gStretchedSurface == NULL )
-	{
-		printf( "Failed to load stretching image!\n" );
-		success = false;
-	}
-
-    return success;
-}
-
-
-SDL_Surface* loadStretchedSurface( std::string path )
+SDL_Surface* loadStretchedSurface( std::string path, SDL_Surface* gScreenSurface )
 {
 	//The final optimized image
 	SDL_Surface* optimizedSurface = NULL;
-
 	//Load image at specified path
 	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
 	if( loadedSurface == NULL )
@@ -147,11 +87,9 @@ SDL_Surface* loadStretchedSurface( std::string path )
 		{
 			printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
 		}
-
 		//Get rid of old loaded surface
 		SDL_FreeSurface( loadedSurface );
 	}
-
 	return optimizedSurface;
 }
 
@@ -159,12 +97,10 @@ SDL_Surface* loadStretchedSurface( std::string path )
 void close()
 {
     //Deallocate surface
-    SDL_FreeSurface( gHelloWorld );
-    gHelloWorld = NULL;
+    player.close();
 
     //Destroy window
-    SDL_DestroyWindow( gWindow );
-    gWindow = NULL;
+    gameWindow.close();
 
     //Quit SDL subsystems
     SDL_Quit();
@@ -177,6 +113,10 @@ void mainGameLoop()
 
     //Event handler
     SDL_Event e;
+
+    //Current animation frame.
+    //int frame = 0;
+
     while( !quit )
     {
         //Handle events on queue
@@ -204,28 +144,42 @@ void mainGameLoop()
             }
         }
         
-        //Apply the image stretched
-        SDL_Rect stretchRect;
-        stretchRect.x = 0;
-        stretchRect.y = 0;
-        stretchRect.w = SCREEN_WIDTH / 4;
-        stretchRect.h = SCREEN_HEIGHT / 4;
 
-
+        // Temporarily keeping this here.
         SDL_Rect playerRect;
         playerRect.x = player.pos.x;
         playerRect.y = player.pos.y;
         playerRect.w = PLAYER_WIDTH;
         playerRect.h = PLAYER_HEIGHT;
 
-        
+        SDL_SetRenderDrawColor (gameWindow.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderClear( gameWindow.gRenderer);
+
+        /*
+
+        //Render current frame
+        SDL_Rect* currentClip = &gSpriteClips[ frame / 4 ];
+        gSpriteSheetTexture.render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
+
+        //Update screen
+        SDL_RenderPresent( gRenderer );
+
+        //Go to next frame
+        ++frame;
+
+        //Cycle animation
+        if( frame / 4 >= WALKING_ANIMATION_FRAMES )
+        {
+            frame = 0;
+        }
+        */
 
 
         //SDL_BlitScaled( gStretchedSurface, NULL, gScreenSurface, &stretchRect );
-        SDL_BlitScaled( gPlayerSurface, NULL, gScreenSurface, &playerRect );
+        SDL_BlitScaled( gPlayerSurface, NULL,gameWindow.gScreenSurface, &playerRect );
     
         //Update the surface
-        SDL_UpdateWindowSurface( gWindow );
+        SDL_UpdateWindowSurface( gameWindow.gameWindow );
     }
 }
 

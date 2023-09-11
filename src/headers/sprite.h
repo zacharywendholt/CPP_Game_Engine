@@ -16,12 +16,12 @@ class SpriteTexture
 		~SpriteTexture();
 
 		//Loads image at specified path
-		bool loadFromFile( std::string path, SDL_Renderer& gRenderer);
+		bool loadFromFile( std::string path, SDL_Renderer* gRenderer);
 
 		//Deallocates texture
 		void free();
 
-        bool loadSpriteAnimationFrames(SDL_Renderer& gRenderer);
+        bool loadSpriteAnimationFrames(SDL_Renderer* gRenderer);
 
 		//Set color modulation
 		void setColor( Uint8 red, Uint8 green, Uint8 blue );
@@ -33,7 +33,7 @@ class SpriteTexture
 		void setAlpha( Uint8 alpha );
 		
 		//Renders texture at given point
-		void render( int x, int y, SDL_Rect* clip = NULL, SDL_Renderer& gRenderer );
+		void render( int x, int y, SDL_Renderer* gRenderer, SDL_Rect* clip = NULL );
 
 		//Gets image dimensions
 		int getWidth();
