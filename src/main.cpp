@@ -155,6 +155,9 @@ void mainGameLoop()
         SDL_SetRenderDrawColor (gameWindow.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear( gameWindow.gRenderer);
 
+        player.animationUpdate(gameWindow.gRenderer);
+
+        SDL_RenderPresent( gameWindow.gRenderer);
         /*
 
         //Render current frame

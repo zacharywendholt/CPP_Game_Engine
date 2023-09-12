@@ -1,4 +1,5 @@
 #include "point.h"
+#include "sprite.h"
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -18,7 +19,9 @@ class Player {
         int height;
         Point pos;
         SDL_Surface* playerSurface;
+        SpriteTexture playerTexture;
         void move(int x, int y);
+        void animationUpdate(SDL_Renderer* gRenderer);
         void close();
         
 };

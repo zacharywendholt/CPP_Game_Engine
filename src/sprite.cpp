@@ -12,12 +12,17 @@ SpriteTexture::SpriteTexture()
 	mWidth = 0;
 	mHeight = 0;
     numberOfFrames = 4;
+	currentFrame = 0;
 }
 
 SpriteTexture::~SpriteTexture()
 {
 	//Deallocate
 	free();
+}
+
+void SpriteTexture::initSpriteTexture() {
+
 }
 
 bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer* gRenderer)
@@ -91,7 +96,7 @@ void SpriteTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer, SDL_Rect* clip)
+void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer)
 {
 	// LOOK ino this. 
 
@@ -99,16 +104,25 @@ void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer, SDL_Rect* cli
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
+	SDL_Rect* currentClip = &animationFrames[ currentFrame / 4 ];
+
 	//Set clip rendering dimensions
-	if( clip != NULL )
+	if( currentClip != NULL )
 	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
+		renderQuad.w = currentClip->w;
+		renderQuad.h = currentClip->h;
 	}
-	
 
 	//Render to screen
-	SDL_RenderCopy( gRenderer, mTexture, clip, NULL );
+	SDL_RenderCopy( gRenderer, mTexture, currentClip, &renderQuad);
+
+	currentFrame++;
+
+	if( currentFrame / 4 >= 4 )
+	{
+		currentFrame = 0;
+	}
+
 }
 
 int SpriteTexture::getWidth()

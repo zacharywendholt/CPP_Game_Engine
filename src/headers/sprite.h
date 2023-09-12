@@ -15,6 +15,8 @@ class SpriteTexture
 		//Deallocates memory
 		~SpriteTexture();
 
+		void initSpriteTexture();
+
 		//Loads image at specified path
 		bool loadFromFile( std::string path, SDL_Renderer* gRenderer);
 
@@ -33,7 +35,7 @@ class SpriteTexture
 		void setAlpha( Uint8 alpha );
 		
 		//Renders texture at given point
-		void render( int x, int y, SDL_Renderer* gRenderer, SDL_Rect* clip = NULL );
+		void render( int x, int y, SDL_Renderer* gRenderer );
 
 		//Gets image dimensions
 		int getWidth();
@@ -42,13 +44,15 @@ class SpriteTexture
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;
-        SDL_Rect* animationFrames;
+
+		SDL_Rect animationFrames[ 4 ];
 
 		//Image dimensions
 		int mWidth;
 		int mHeight;
 
         int numberOfFrames;
+		int currentFrame;
         
 };
 
