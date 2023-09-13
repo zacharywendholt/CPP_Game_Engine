@@ -2,24 +2,16 @@
 #include "headers/player.h"
 #include <stdio.h>
 
-Player::Player(int speed, int width, int height, Point pos) 
+Player::Player(int speed, int width, int height, Point pos, SpriteTexture playerTexture) 
 {
     
     this->speed = speed;
     this->pos = pos;
     this->width = width;
     this->height = height;
-    this->playerTexture = SpriteTexture();
+    this->playerTexture = playerTexture;
 }
 
-Player::Player(int speed, int width, int height)
-{   
-    this->speed = speed;
-    this->pos = Point(0, 0);
-    this->width = width;
-    this->height = height;
-    this->playerTexture = SpriteTexture();
-}
 
 Player::Player() 
 {    
@@ -29,12 +21,12 @@ Player::Player()
     this->pos = Point(50, 50);
     this->width = 10;
     this->height = 10;
-    this->playerTexture = SpriteTexture();
+    this->playerTexture = playerTexture;
 }
 
 void Player::animationUpdate(SDL_Renderer* gRenderer) 
 {
-    this->playerTexture.render(this->pos.x, this->pos.y, gRenderer);
+    this->playerTexture.render(this->pos.x, this->pos.y);
 }
 
 void Player::move(int x, int y) 

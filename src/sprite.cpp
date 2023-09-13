@@ -5,7 +5,7 @@
 #include "headers/sprite.h"
 
 //Texture wrapper class
-SpriteTexture::SpriteTexture()
+SpriteTexture::SpriteTexture(SDL_Renderer* spriteRenderer)
 {
 	//Initialize
 	mTexture = NULL;
@@ -13,24 +13,39 @@ SpriteTexture::SpriteTexture()
 	mHeight = 0;
     numberOfFrames = 4;
 	currentFrame = 0;
+	this->spriteRenderer = spriteRenderer;
 	initSpriteTexture();
+}
+
+SpriteTexture::SpriteTexture() 
+{
+	mTexture = NULL;
+	mWidth = 0;
+	mHeight = 0;
+	numberOfFrames = 0;
+	currentFrame = 0;
+	this->spriteRenderer = NULL;
 }
 
 SpriteTexture::~SpriteTexture()
 {
 	//Deallocate
 	free();
+	spriteRenderer = NULL;
 }
 
 void SpriteTexture::initSpriteTexture() {
-	printf("this is where I need to initialize the sprite sheet before it actually does stuff");
-	//loadSpriteAnimationFrames();
+	if (this->spriteRenderer == NULL) {
+		printf("\nSprite Renderer is Null in the sprite init\n");
+	} else {
+		loadSpriteAnimationFrames();
+	}
 }
 
-bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer* gRenderer)
+bool SpriteTexture::loadFromFile( std::string path)
 {
 	//Get rid of preexisting texture
-	free();
+	//free();
 
 	//The final texture
 	SDL_Texture* newTexture = NULL;
@@ -47,7 +62,7 @@ bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer* gRenderer)
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
+        newTexture = SDL_CreateTextureFromSurface( this->spriteRenderer, loadedSurface );
 		if( newTexture == NULL )
 		{
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -98,10 +113,9 @@ void SpriteTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer)
+void SpriteTexture::render( int x, int y)
 {
-	// LOOK ino this. 
-
+	// Start checking the actual render values for this.
 	
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
@@ -119,7 +133,7 @@ void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer)
 	}
 
 	//Render to screen
-	SDL_RenderCopy( gRenderer, mTexture, currentClip, &renderQuad);
+	SDL_RenderCopy( this->spriteRenderer, mTexture, currentClip, &renderQuad);
 
 	currentFrame++;
 
@@ -140,20 +154,19 @@ int SpriteTexture::getHeight()
 	return mHeight;
 }
 
-bool SpriteTexture::loadSpriteAnimationFrames(SDL_Renderer* gRenderer)
+bool SpriteTexture::loadSpriteAnimationFrames()
 {
 	//Loading success flag
 	bool success = true;
 
 	//Load sprite sheet texture
-	if( !loadFromFile( "res/foo.png", gRenderer) )
+	if( !loadFromFile( "res/foo.png") )
 	{
 		printf( "Failed to load walking animation texture!\n" );
 		success = false;
 	}
 	else
 	{
-		printf("set the walking animation");
 		//Set sprite clips
 		animationFrames[ 0 ].x =   0;
 		animationFrames[ 0 ].y =   0;

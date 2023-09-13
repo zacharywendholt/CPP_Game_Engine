@@ -10,7 +10,8 @@ class SpriteTexture
 {
 	public:
         // Initializes variables
-        SpriteTexture();
+        SpriteTexture(SDL_Renderer* spriteRenderer);
+		SpriteTexture();
 
 		//Deallocates memory
 		~SpriteTexture();
@@ -18,12 +19,12 @@ class SpriteTexture
 		void initSpriteTexture();
 
 		//Loads image at specified path
-		bool loadFromFile( std::string path, SDL_Renderer* gRenderer);
+		bool loadFromFile( std::string path);
 
 		//Deallocates texture
 		void free();
 
-        bool loadSpriteAnimationFrames(SDL_Renderer* gRenderer);
+        bool loadSpriteAnimationFrames();
 
 		//Set color modulation
 		void setColor( Uint8 red, Uint8 green, Uint8 blue );
@@ -35,7 +36,7 @@ class SpriteTexture
 		void setAlpha( Uint8 alpha );
 		
 		//Renders texture at given point
-		void render( int x, int y, SDL_Renderer* gRenderer );
+		void render( int x, int y);
 
 		//Gets image dimensions
 		int getWidth();
@@ -44,6 +45,7 @@ class SpriteTexture
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;
+		SDL_Renderer * spriteRenderer;
 
 		SDL_Rect animationFrames[ 4 ];
 

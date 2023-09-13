@@ -11,8 +11,7 @@
 class Player {
       
     public:
-        Player(int speed, int width, int height, Point pos);
-        Player(int speed, int width, int height);
+        Player(int speed, int width, int height, Point pos, SpriteTexture playerTexture);
         Player();
         int speed;
         int width;
