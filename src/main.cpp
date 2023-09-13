@@ -32,9 +32,6 @@ SDL_Surface* loadStretchedSurface( std::string path , SDL_Surface* gRenderer);
 //The image we will load and show on the screen
 SDL_Surface* gHelloWorld = NULL;
 
-SDL_Surface* gPlayerSurface = NULL;
-
-
 int main( int argc, char* args[] )
 {
 	//Start up SDL and create window
@@ -64,7 +61,6 @@ bool init()
                     PLAYER_WIDTH, 
                     PLAYER_HEIGHT, 
                     Point(50, 50));
-    gPlayerSurface = loadStretchedSurface("res/player.bmp", gameWindow.gScreenSurface);
     return success;
 }
 
@@ -143,14 +139,6 @@ void mainGameLoop()
                 }
             }
         }
-        
-
-        // Temporarily keeping this here.
-        SDL_Rect playerRect;
-        playerRect.x = player.pos.x;
-        playerRect.y = player.pos.y;
-        playerRect.w = PLAYER_WIDTH;
-        playerRect.h = PLAYER_HEIGHT;
 
         SDL_SetRenderDrawColor (gameWindow.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear( gameWindow.gRenderer);
@@ -158,31 +146,7 @@ void mainGameLoop()
         player.animationUpdate(gameWindow.gRenderer);
 
         SDL_RenderPresent( gameWindow.gRenderer);
-        /*
-
-        //Render current frame
-        SDL_Rect* currentClip = &gSpriteClips[ frame / 4 ];
-        gSpriteSheetTexture.render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
-
-        //Update screen
-        SDL_RenderPresent( gRenderer );
-
-        //Go to next frame
-        ++frame;
-
-        //Cycle animation
-        if( frame / 4 >= WALKING_ANIMATION_FRAMES )
-        {
-            frame = 0;
-        }
-        */
-
-
-        //SDL_BlitScaled( gStretchedSurface, NULL, gScreenSurface, &stretchRect );
-        SDL_BlitScaled( gPlayerSurface, NULL,gameWindow.gScreenSurface, &playerRect );
     
-        //Update the surface
-        SDL_UpdateWindowSurface( gameWindow.gameWindow );
     }
 }
 

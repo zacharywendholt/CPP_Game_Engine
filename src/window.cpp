@@ -45,11 +45,7 @@ bool Window::initWindow() {
 		}
 		else
 		{
-			this->gScreenSurface = SDL_GetWindowSurface( this->gameWindow );
-			if (this->gScreenSurface == NULL) {
-				printf("The main window screen could not be created");
-				success = false;
-			}
+			success = false;
 		}
 	}
 
@@ -58,9 +54,10 @@ bool Window::initWindow() {
 
 bool Window::initRenderer() {
     bool success = true;
+
     //Create vsynced renderer for window
-    this->gRenderer = SDL_CreateRenderer( gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-    if( gRenderer == NULL )
+    this->gRenderer = SDL_CreateRenderer( this->gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+    if( this->gRenderer == NULL )
     {
         printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
         success = false;
@@ -68,7 +65,7 @@ bool Window::initRenderer() {
     else
     {
         //Initialize renderer color
-        SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_SetRenderDrawColor( this->gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 
         //Initialize PNG loading
         int imgFlags = IMG_INIT_PNG;

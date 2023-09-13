@@ -13,6 +13,7 @@ SpriteTexture::SpriteTexture()
 	mHeight = 0;
     numberOfFrames = 4;
 	currentFrame = 0;
+	initSpriteTexture();
 }
 
 SpriteTexture::~SpriteTexture()
@@ -22,7 +23,8 @@ SpriteTexture::~SpriteTexture()
 }
 
 void SpriteTexture::initSpriteTexture() {
-
+	printf("this is where I need to initialize the sprite sheet before it actually does stuff");
+	//loadSpriteAnimationFrames();
 }
 
 bool SpriteTexture::loadFromFile( std::string path, SDL_Renderer* gRenderer)
@@ -112,6 +114,9 @@ void SpriteTexture::render( int x, int y, SDL_Renderer* gRenderer)
 		renderQuad.w = currentClip->w;
 		renderQuad.h = currentClip->h;
 	}
+	else {
+		printf(  SDL_GetError() );
+	}
 
 	//Render to screen
 	SDL_RenderCopy( gRenderer, mTexture, currentClip, &renderQuad);
@@ -148,6 +153,7 @@ bool SpriteTexture::loadSpriteAnimationFrames(SDL_Renderer* gRenderer)
 	}
 	else
 	{
+		printf("set the walking animation");
 		//Set sprite clips
 		animationFrames[ 0 ].x =   0;
 		animationFrames[ 0 ].y =   0;
