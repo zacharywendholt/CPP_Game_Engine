@@ -69,6 +69,7 @@ bool init()
 
 SDL_Surface* loadStretchedSurface( std::string path, SDL_Surface* gScreenSurface )
 {
+    
 	//The final optimized image
 	SDL_Surface* optimizedSurface = NULL;
 	//Load image at specified path
@@ -144,11 +145,14 @@ void mainGameLoop()
 
         SDL_SetRenderDrawColor (gameWindow.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear( gameWindow.gRenderer);
+        
 
-        player.animationUpdate(gameWindow.gRenderer);
+        player.animationUpdate();
 
         SDL_RenderPresent( gameWindow.gRenderer);
-    
+        //printf( "Render issue %s! SDL Error: %s\n", " ", SDL_GetError() );
+        
+
     }
 }
 

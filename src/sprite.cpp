@@ -7,6 +7,7 @@
 //Texture wrapper class
 SpriteTexture::SpriteTexture(SDL_Renderer* spriteRenderer)
 {
+	printf("good texture\n check parameters \n");
 	//Initialize
 	mTexture = NULL;
 	mWidth = 0;
@@ -19,12 +20,16 @@ SpriteTexture::SpriteTexture(SDL_Renderer* spriteRenderer)
 
 SpriteTexture::SpriteTexture() 
 {
+	printf("bad texture\n");
 	mTexture = NULL;
 	mWidth = 0;
 	mHeight = 0;
 	numberOfFrames = 0;
 	currentFrame = 0;
 	this->spriteRenderer = NULL;
+
+	printf("this is where render issue starts I believe. if I dont initialize it, then there is no image, if i do, then there is no renderer.");
+	initSpriteTexture();
 }
 
 SpriteTexture::~SpriteTexture()
@@ -45,7 +50,6 @@ void SpriteTexture::initSpriteTexture() {
 bool SpriteTexture::loadFromFile( std::string path)
 {
 	//Get rid of preexisting texture
-	//free();
 
 	//The final texture
 	SDL_Texture* newTexture = NULL;
@@ -122,6 +126,9 @@ void SpriteTexture::render( int x, int y)
 
 	SDL_Rect* currentClip = &animationFrames[ currentFrame / 4 ];
 
+	// 50, 50   mWidth: 256mHeight: 205
+	// 50, 50  mWidth: 256mHeight: 205
+
 	//Set clip rendering dimensions
 	if( currentClip != NULL )
 	{
@@ -130,6 +137,14 @@ void SpriteTexture::render( int x, int y)
 	}
 	else {
 		printf(  SDL_GetError() );
+	}
+
+	if (mTexture == NULL) {
+		printf("there is no texture");
+	}
+
+	if (currentClip == NULL) {
+		printf("no current clip");
 	}
 
 	//Render to screen
@@ -158,6 +173,7 @@ bool SpriteTexture::loadSpriteAnimationFrames()
 {
 	//Loading success flag
 	bool success = true;
+	free();
 
 	//Load sprite sheet texture
 	if( !loadFromFile( "res/foo.png") )

@@ -20,7 +20,7 @@ class Player {
         SDL_Surface* playerSurface;
         SpriteTexture playerTexture;
         void move(int x, int y);
-        void animationUpdate(SDL_Renderer* gRenderer);
+        void animationUpdate();
         void close();
         
 };
