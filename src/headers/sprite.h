@@ -10,8 +10,7 @@ class SpriteTexture
 {
 	public:
         // Initializes variables
-        SpriteTexture(SDL_Renderer* spriteRenderer);
-		SpriteTexture();
+        SpriteTexture();
 
 		//Deallocates memory
 		~SpriteTexture();
@@ -45,7 +44,6 @@ class SpriteTexture
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;
-		SDL_Renderer * spriteRenderer;
 
 		SDL_Rect animationFrames[ 4 ];
 

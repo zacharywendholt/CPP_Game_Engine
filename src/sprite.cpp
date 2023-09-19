@@ -3,9 +3,10 @@
 #include <stdio.h>
 #include <string>
 #include "headers/sprite.h"
+#include "headers/globals.h"
 
 //Texture wrapper class
-SpriteTexture::SpriteTexture(SDL_Renderer* spriteRenderer)
+SpriteTexture::SpriteTexture()
 {
 	printf("good texture\n check parameters \n");
 	//Initialize
@@ -14,37 +15,20 @@ SpriteTexture::SpriteTexture(SDL_Renderer* spriteRenderer)
 	mHeight = 0;
     numberOfFrames = 4;
 	currentFrame = 0;
-	this->spriteRenderer = spriteRenderer;
 	initSpriteTexture();
 }
 
-SpriteTexture::SpriteTexture() 
-{
-	printf("bad texture\n");
-	mTexture = NULL;
-	mWidth = 0;
-	mHeight = 0;
-	numberOfFrames = 0;
-	currentFrame = 0;
-	this->spriteRenderer = NULL;
-
-	printf("this is where render issue starts I believe. if I dont initialize it, then there is no image, if i do, then there is no renderer.");
-	initSpriteTexture();
-}
 
 SpriteTexture::~SpriteTexture()
 {
 	//Deallocate
 	free();
-	spriteRenderer = NULL;
 }
 
 void SpriteTexture::initSpriteTexture() {
-	if (this->spriteRenderer == NULL) {
-		printf("\nSprite Renderer is Null in the sprite init\n");
-	} else {
-		loadSpriteAnimationFrames();
-	}
+	
+	loadSpriteAnimationFrames();
+	
 }
 
 bool SpriteTexture::loadFromFile( std::string path)
@@ -66,7 +50,7 @@ bool SpriteTexture::loadFromFile( std::string path)
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( this->spriteRenderer, loadedSurface );
+        newTexture = SDL_CreateTextureFromSurface( gameRenderer, loadedSurface );
 		if( newTexture == NULL )
 		{
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -148,7 +132,7 @@ void SpriteTexture::render( int x, int y)
 	}
 
 	//Render to screen
-	SDL_RenderCopy( this->spriteRenderer, mTexture, currentClip, &renderQuad);
+	SDL_RenderCopy( gameRenderer, mTexture, currentClip, &renderQuad);
 
 	currentFrame++;
 

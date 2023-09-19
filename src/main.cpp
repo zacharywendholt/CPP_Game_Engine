@@ -3,10 +3,7 @@
 #include <SDL.h>
 #include "headers/player.h"
 #include "headers/point.h"
-#include "headers/window.h"
-
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+#include "headers/globals.h"
 
 //Player Information
 
@@ -16,7 +13,6 @@ const int PLAYER_HEIGHT = 10;
 
 Player player;
 
-Window gameWindow;
 
 //Starts up SDL and creates window
 bool init();
@@ -27,7 +23,7 @@ void close();
 void mainGameLoop();
 
 //Loads individual image
-SDL_Surface* loadStretchedSurface( std::string path , SDL_Surface* gRenderer);
+SDL_Surface* loadStretchedSurface( std::string path , SDL_Surface* gSurface);
 
 //The image we will load and show on the screen
 SDL_Surface* gHelloWorld = NULL;
@@ -61,7 +57,7 @@ bool init()
                     PLAYER_WIDTH, 
                     PLAYER_HEIGHT, 
                     Point(50, 50),
-                    SpriteTexture(gameWindow.gRenderer)
+                    SpriteTexture()
                     );
     return success;
 }
@@ -99,7 +95,7 @@ void close()
     player.close();
 
     //Destroy window
-    gameWindow.close();
+    
 
     //Quit SDL subsystems
     SDL_Quit();
@@ -143,13 +139,13 @@ void mainGameLoop()
             }
         }
 
-        SDL_SetRenderDrawColor (gameWindow.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-        SDL_RenderClear( gameWindow.gRenderer);
+        SDL_SetRenderDrawColor (gameRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderClear( gameRenderer);
         
 
         player.animationUpdate();
 
-        SDL_RenderPresent( gameWindow.gRenderer);
+        SDL_RenderPresent( gameRenderer);
         //printf( "Render issue %s! SDL Error: %s\n", " ", SDL_GetError() );
         
 
