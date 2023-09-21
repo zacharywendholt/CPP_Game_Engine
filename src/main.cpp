@@ -1,9 +1,9 @@
 #include <iostream>
-
 #include <SDL.h>
+#include "headers/globals.h"
 #include "headers/player.h"
 #include "headers/point.h"
-#include "headers/globals.h"
+
 
 //Player Information
 
@@ -69,7 +69,7 @@ SDL_Surface* loadStretchedSurface( std::string path, SDL_Surface* gScreenSurface
 	//The final optimized image
 	SDL_Surface* optimizedSurface = NULL;
 	//Load image at specified path
-	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
 	if( loadedSurface == NULL )
 	{
 		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -142,7 +142,6 @@ void mainGameLoop()
         SDL_SetRenderDrawColor (gameRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear( gameRenderer);
         
-
         player.animationUpdate();
 
         SDL_RenderPresent( gameRenderer);

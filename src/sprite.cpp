@@ -8,7 +8,8 @@
 //Texture wrapper class
 SpriteTexture::SpriteTexture()
 {
-	printf("good texture\n check parameters \n");
+	printf("this could also probably work by taking in the string of the path for the image. \n then load the image, and make the texture. \n");
+	printf("default constructor could just use some default image then. ");
 	//Initialize
 	mTexture = NULL;
 	mWidth = 0;
@@ -131,8 +132,11 @@ void SpriteTexture::render( int x, int y)
 		printf("no current clip");
 	}
 
-	//Render to screen
-	SDL_RenderCopy( gameRenderer, mTexture, currentClip, &renderQuad);
+	printf("this tells me that there is probably some issue with this thing handling it's own texture. check it out\n");
+	SDL_Surface* testSurface = IMG_Load("res/foo.png");
+    SDL_Texture* testTexture = SDL_CreateTextureFromSurface(gameRenderer, testSurface);
+
+    SDL_RenderCopy(gameRenderer, testTexture, currentClip, &renderQuad);
 
 	currentFrame++;
 
@@ -157,7 +161,7 @@ bool SpriteTexture::loadSpriteAnimationFrames()
 {
 	//Loading success flag
 	bool success = true;
-	free();
+	//free();
 
 	//Load sprite sheet texture
 	if( !loadFromFile( "res/foo.png") )

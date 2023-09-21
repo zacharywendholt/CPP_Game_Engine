@@ -4,8 +4,6 @@
 
 Player::Player(int speed, int width, int height, Point pos, SpriteTexture playerTexture) 
 {
-    printf("Start here with the parameters of the constructors. Should things like Point pos, and SpriteTexture playerTexture actually be pointers instead? feels like they should be");
-    printf("also should probably rewrite sprite functions to use a renderer parameter.");
     this->speed = speed;
     this->pos = pos;
     this->width = width;
@@ -16,7 +14,6 @@ Player::Player(int speed, int width, int height, Point pos, SpriteTexture player
 
 Player::Player() 
 {    
-    printf("Player Initialization (bad)\n");
     // make sure that the player width and height match up with the other stuff
     
     this->speed = 5;
