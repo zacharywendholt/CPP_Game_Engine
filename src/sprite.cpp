@@ -16,7 +16,6 @@ SpriteTexture::SpriteTexture()
 	mHeight = 0;
     numberOfFrames = 4;
 	currentFrame = 0;
-	initSpriteTexture();
 }
 
 
@@ -27,50 +26,12 @@ SpriteTexture::~SpriteTexture()
 }
 
 void SpriteTexture::initSpriteTexture() {
-	
+	SDL_Surface* testSurface = IMG_Load("res/foo.png");
+    mTexture = SDL_CreateTextureFromSurface(gameRenderer, testSurface);
 	loadSpriteAnimationFrames();
 	
 }
 
-bool SpriteTexture::loadFromFile( std::string path)
-{
-	//Get rid of preexisting texture
-
-	//The final texture
-	SDL_Texture* newTexture = NULL;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL )
-	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-	}
-	else
-	{
-		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
-
-		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gameRenderer, loadedSurface );
-		if( newTexture == NULL )
-		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-		}
-		else
-		{
-			//Get image dimensions
-			mWidth = loadedSurface->w;
-			mHeight = loadedSurface->h;
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
-	}
-
-	//Return success
-	mTexture = newTexture;
-	return mTexture != NULL;
-}
 
 void SpriteTexture::free()
 {
@@ -84,35 +45,21 @@ void SpriteTexture::free()
 	}
 }
 
-void SpriteTexture::setColor( Uint8 red, Uint8 green, Uint8 blue )
-{
-	//Modulate texture rgb
-	SDL_SetTextureColorMod( mTexture, red, green, blue );
-}
-
-void SpriteTexture::setBlendMode( SDL_BlendMode blending )
-{
-	//Set blending function
-	SDL_SetTextureBlendMode( mTexture, blending );
-}
-		
-void SpriteTexture::setAlpha( Uint8 alpha )
-{
-	//Modulate texture alpha
-	SDL_SetTextureAlphaMod( mTexture, alpha );
-}
 
 void SpriteTexture::render( int x, int y)
 {
+
+	if (mTexture == NULL) {
+		printf("please only be once");
+		initSpriteTexture();
+	}
 	// Start checking the actual render values for this.
 	
-	//Set rendering space and render to screen
+	// Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
+	// Choose the actual sprite frame from the animation sheet.
 	SDL_Rect* currentClip = &animationFrames[ currentFrame / 4 ];
-
-	// 50, 50   mWidth: 256mHeight: 205
-	// 50, 50  mWidth: 256mHeight: 205
 
 	//Set clip rendering dimensions
 	if( currentClip != NULL )
@@ -124,19 +71,7 @@ void SpriteTexture::render( int x, int y)
 		printf(  SDL_GetError() );
 	}
 
-	if (mTexture == NULL) {
-		printf("there is no texture");
-	}
-
-	if (currentClip == NULL) {
-		printf("no current clip");
-	}
-
-	printf("this tells me that there is probably some issue with this thing handling it's own texture. check it out\n");
-	SDL_Surface* testSurface = IMG_Load("res/foo.png");
-    SDL_Texture* testTexture = SDL_CreateTextureFromSurface(gameRenderer, testSurface);
-
-    SDL_RenderCopy(gameRenderer, testTexture, currentClip, &renderQuad);
+    SDL_RenderCopy(gameRenderer, mTexture, currentClip, &renderQuad);
 
 	currentFrame++;
 
@@ -144,7 +79,6 @@ void SpriteTexture::render( int x, int y)
 	{
 		currentFrame = 0;
 	}
-
 }
 
 int SpriteTexture::getWidth()
@@ -161,10 +95,9 @@ bool SpriteTexture::loadSpriteAnimationFrames()
 {
 	//Loading success flag
 	bool success = true;
-	//free();
 
 	//Load sprite sheet texture
-	if( !loadFromFile( "res/foo.png") )
+	if( false )
 	{
 		printf( "Failed to load walking animation texture!\n" );
 		success = false;
