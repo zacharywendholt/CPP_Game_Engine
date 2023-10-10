@@ -9,6 +9,8 @@
 class SpriteTexture
 {
 	public:
+		SpriteTexture(const char * spritePath);
+
         // Initializes variables
         SpriteTexture();
 
@@ -41,6 +43,8 @@ class SpriteTexture
 
         int numberOfFrames;
 		int currentFrame;
+
+		const char * spritePath;
         
 };
 

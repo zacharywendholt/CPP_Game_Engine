@@ -5,11 +5,19 @@
 #include "headers/sprite.h"
 #include "headers/globals.h"
 
-//Texture wrapper class
+
+SpriteTexture::SpriteTexture(const char *spritePath) 
+{
+	this->spritePath = spritePath;
+	mTexture = NULL;
+	mWidth = 0;
+	mHeight = 0;
+    numberOfFrames = 4;
+	currentFrame = 0;
+}
+
 SpriteTexture::SpriteTexture()
 {
-	printf("this could also probably work by taking in the string of the path for the image. \n then load the image, and make the texture. \n");
-	printf("default constructor could just use some default image then. ");
 	//Initialize
 	mTexture = NULL;
 	mWidth = 0;
@@ -26,8 +34,15 @@ SpriteTexture::~SpriteTexture()
 }
 
 void SpriteTexture::initSpriteTexture() {
-	SDL_Surface* testSurface = IMG_Load("res/foo.png");
-    mTexture = SDL_CreateTextureFromSurface(gameRenderer, testSurface);
+	SDL_Surface* spriteSurface;
+	if (spritePath) {
+		spriteSurface = IMG_Load(spritePath);
+	}
+	
+	if (!spriteSurface) {
+		spriteSurface = IMG_Load("res/foo.png");
+	}
+    mTexture = SDL_CreateTextureFromSurface(gameRenderer, spriteSurface);
 	loadSpriteAnimationFrames();
 	
 }

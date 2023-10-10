@@ -57,7 +57,7 @@ bool init()
                     PLAYER_WIDTH, 
                     PLAYER_HEIGHT, 
                     Point(50, 50),
-                    SpriteTexture()
+                    SpriteTexture("foo.png")
                     );
     return success;
 }
