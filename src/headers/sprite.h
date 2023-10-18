@@ -9,6 +9,7 @@
 class SpriteTexture
 {
 	public:
+		
 		SpriteTexture(const char * spritePath);
 
         // Initializes variables

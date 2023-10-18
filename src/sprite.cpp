@@ -65,7 +65,6 @@ void SpriteTexture::render( int x, int y)
 {
 
 	if (mTexture == NULL) {
-		printf("please only be once");
 		initSpriteTexture();
 	}
 	// Start checking the actual render values for this.
